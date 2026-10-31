@@ -2,6 +2,7 @@
 
 module Lambek where
 
+import LExp
 import LTypes
 
 dec_rinv :: [LTp] -> LTp -> Bool
@@ -30,3 +31,23 @@ isGrammatical lex ws =
        | ts <- sequence [[t | (word, t, _) <- items lex, word == w]
                         | w <- ws]]
 
+der_rinv :: [(Var, LTp)] -> LTp -> [LExp]
+der_rinv gamma (DivL a b) =
+    [L x body | body <- der_rinv ((x, a) : gamma) b]
+  where
+    x = fresh [V v | (v, _) <- gamma]
+der_rinv gamma (DivR a b) =
+    [L x body | body <- der_rinv (gamma ++ [(x, b)]) a]
+  where
+    x = fresh [V v | (v, _) <- gamma]
+der_rinv gamma (Atm p) =
+    [applyArgs (V v) args
+    | i <- [0 .. length gamma - 1]
+    , let (v, t) = gamma !! i
+    , args <- der_lfoc (take i gamma) t (drop (i + 1) gamma) p
+    ]
+
+applyArgs :: LExp -> [LExp] -> LExp
+applyArgs expr [] = expr
+applyArgs expr (arg : rest) =
+    applyArgs (A expr arg) rest
