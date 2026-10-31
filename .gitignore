@@ -1,0 +1,11 @@
+*.hi
+*.o
+dist-newstyle/
+.stack-work/
+LLaMbda/ChatLLaMbda
+__pycache__/
+*.pyc
+*:Zone.Identifier
+LLaMbda.zip
+.codex/
+.agents/
