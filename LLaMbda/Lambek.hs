@@ -47,6 +47,24 @@ der_rinv gamma (Atm p) =
     , args <- der_lfoc (take i gamma) t (drop (i + 1) gamma) p
     ]
 
+der_lfoc :: [(Var, LTp)] -> LTp -> [(Var, LTp)] -> Atm -> [[LExp]]
+der_lfoc gammaL (Atm q) gammaR p =
+    if null gammaL && null gammaR && q == p
+    then [[]]
+    else []
+der_lfoc gammaL (DivL a b) gammaR p =
+    [argument : args
+    | i <- [0 .. length gammaL]
+    , argument <- der_rinv (drop i gammaL) a
+    , args <- der_lfoc (take i gammaL) b gammaR p
+    ]
+der_lfoc gammaL (DivR a b) gammaR p =
+    [argument : args
+    | i <- [0 .. length gammaR]
+    , argument <- der_rinv (take i gammaR) b
+    , args <- der_lfoc gammaL a (drop i gammaR) p
+    ]
+
 applyArgs :: LExp -> [LExp] -> LExp
 applyArgs expr [] = expr
 applyArgs expr (arg : rest) =
