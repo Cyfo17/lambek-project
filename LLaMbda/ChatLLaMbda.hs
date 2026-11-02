@@ -1,5 +1,7 @@
-import Data.Char
+import Control.Monad (unless)
+import LExp
 import System.IO
+import System.Process (waitForProcess)
 import Control.Exception
 
 import LTypes
@@ -8,39 +10,61 @@ import qualified Lambek
 import Parser
 import PySupport
 
--- "standardize" the capitalization of a word by making the first
--- letter uppercase and the following letters lowercase.
--- (This will make it easier to look up words in the lexicon.)
-stdize (c:cs) = toUpper c : map toLower cs
+toPython :: LExp -> String
+toPython (V x) = x
+toPython (A f arg) = "(" ++ toPython f ++ ")(" ++ toPython arg ++ ")"
+toPython (L x body) = "(lambda " ++ x ++ ": " ++ toPython body ++ ")"
 
--- read-eval-print-loop
+showMeaning :: PythonHandle -> (LExp, [(Var, PythonCode)]) -> IO ()
+showMeaning phandle (expr, meanings) = do
+  let code = unlines $
+        ["try:"] ++
+        ["    " ++ v ++ " = (" ++ text meaning ++ ")" | (v, meaning) <- meanings] ++
+        [ "    print(" ++ toPython expr ++ ")"
+        , "except Exception as error:"
+        , "    print('Evaluation error:', error)"
+        , ""
+        ]
+  result <- runPythonCode phandle (PCode code)
+  putStrLn ("Sense [" ++ prettyLExp expr ++ "]: " ++ result)
+
+closePython :: PythonHandle -> IO ()
+closePython (hin, hout, herr, process) = do
+  hClose hin
+  _ <- waitForProcess process
+  hClose hout
+  hClose herr
+
 repl :: Lexicon PythonCode -> PythonHandle -> IO ()
 repl elx phandle = do
-  -- print the prompt
   putStr "> "
-  -- get a line of input
-  line <- getLine
-  -- split it up into "standardized" words
-  let ws = map stdize $ words line
-  -- test if the string of words is a grammatical sentence according to the lexicon
-  if Lambek.isGrammatical elx ws
-    then putStrLn "That is a well-formed sentence!"
-    else putStrLn "That is not a well-formed sentence"
-  -- repeat
-  repl elx phandle
-      
+  eof <- isEOF
+  unless eof $ do
+    line <- getLine
+    let ws = map Lambek.standardize (words line)
+    if words line == [":quit"] || words line == [":q"]
+      then putStrLn "Goodbye!"
+      else do
+        if null ws then return () else do
+          case Lambek.deriveSentence elx ws of
+            [] -> putStrLn "That is not a well-formed sentence"
+            [reading] -> showMeaning phandle reading
+            readings -> do
+              putStrLn "That sentence is ambiguous"
+              mapM_ (showMeaning phandle) readings
+        repl elx phandle
+
+main :: IO ()
 main = do
-  -- send console output immediately to the user
   hSetBuffering stdout NoBuffering
-  -- input a lexicon file
   elx <- getLex
-  -- input a database of facts
   db <- getDB
-  -- launch a Python interpreter
-  phandle <- launchPython db
-  -- start the read-eval-print loop
-  putStrLn "Starting chat..."
-  repl elx phandle
+  result <- try (bracket (launchPython db) closePython $ \phandle -> do
+    putStrLn "Starting chat... (type :quit to exit)"
+    repl elx phandle) :: IO (Either IOError ())
+  case result of
+    Left err -> putStrLn ("Python session error: " ++ show err)
+    Right () -> return ()
   where
     getDB :: IO PythonCode
     getDB = do

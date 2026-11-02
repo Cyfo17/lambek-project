@@ -4,6 +4,22 @@ module Lambek where
 
 import LExp
 import LTypes
+import Data.Char (toUpper, toLower)
+
+-- Keep the chosen lexical meaning for each distinct word occurrence.
+deriveSentence :: Lexicon sem -> [String] -> [(LExp, [(Var, sem)])]
+deriveSentence lex ws =
+    [(expr, [(v, meaning) | (v, _, meaning) <- entries])
+    | entries <- sequence
+        [[(word ++ "_" ++ show i, t, meaning)
+         | (w, t, meaning) <- items lex, w == word]
+        | (i, word) <- zip [1 :: Int ..] (map standardize ws)]
+    , expr <- der_rinv [(v, t) | (v, t, _) <- entries] (stp lex)
+    ]
+
+standardize :: String -> String
+standardize [] = []
+standardize (c:cs) = toUpper c : map toLower cs
 
 dec_rinv :: [LTp] -> LTp -> Bool
 dec_rinv gamma (DivL a b) = dec_rinv (a : gamma) b 
