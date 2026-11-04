@@ -1,0 +1,112 @@
+SENTENCE : s.
+
+Eu         : np1sg                          = speaker.
+Tu         : np2sg                          = listener.
+El         : np3sg                          = he.
+Noi        : np1pl                          = we.
+Voi        : np2pl                          = you_plural.
+Ei         : np3pl                          = they.
+Ea         : np3sg                          = she.
+Ele        : np3pl                          = they_female.
+
+Știu       : np1sg \ s                      = lambda subjects : subjects <= know_answer.
+Știu       : s                              = speaker <= know_answer.
+Știi       : np2sg \ s                      = lambda subjects : subjects <= know_answer.
+Știi       : s                              = listener <= know_answer.
+Știe       : np3sg \ s                      = lambda subjects : subjects <= know_answer.
+Știe       : s                              = third <= know_answer.
+Știm       : np1pl \ s                      = lambda subjects : subjects <= know_answer.
+Știm       : s                              = we <= know_answer.
+Știți      : np2pl \ s                      = lambda subjects : subjects <= know_answer.
+Știți      : s                              = you_plural <= know_answer.
+Știu       : np3pl \ s                      = lambda subjects : subjects <= know_answer.
+Știu       : s                              = they <= know_answer.
+
+Dorm       : np1sg \ s                      = lambda subjects : subjects <= sleeping.
+Dorm       : s                              = speaker <= sleeping.
+Dormi      : np2sg \ s                      = lambda subjects : subjects <= sleeping.
+Dormi      : s                              = listener <= sleeping.
+Doarme     : np3sg \ s                      = lambda subjects : subjects <= sleeping.
+Doarme     : s                              = third <= sleeping.
+Dormim     : np1pl \ s                      = lambda subjects : subjects <= sleeping.
+Dormim     : s                              = we <= sleeping.
+Dormiți    : np2pl \ s                      = lambda subjects : subjects <= sleeping.
+Dormiți    : s                              = you_plural <= sleeping.
+Dorm       : np3pl \ s                      = lambda subjects : subjects <= sleeping.
+Dorm       : s                              = they <= sleeping.
+
+Mă         : (np1sg \ s) / rv1sg            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Mă         : s / rv1sg                      = lambda verb : all(verb(x)(x) for x in speaker).
+Te         : (np2sg \ s) / rv2sg            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Te         : s / rv2sg                      = lambda verb : all(verb(x)(x) for x in listener).
+Se         : (np3sg \ s) / rv3sg            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Se         : s / rv3sg                      = lambda verb : all(verb(x)(x) for x in third).
+Ne         : (np1pl \ s) / rv1pl            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Ne         : s / rv1pl                      = lambda verb : all(verb(x)(x) for x in we).
+Vă         : (np2pl \ s) / rv2pl            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Vă         : s / rv2pl                      = lambda verb : all(verb(x)(x) for x in you_plural).
+Se         : (np3pl \ s) / rv3pl            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Se         : s / rv3pl                      = lambda verb : all(verb(x)(x) for x in they).
+
+Culc       : rv1sg                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culci      : rv2sg                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culcă      : rv3sg                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culcăm     : rv1pl                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culcați    : rv2pl                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culcă      : rv3pl                          = lambda x : lambda y : (x, y) in put_to_bed.
+
+Spăl       : rv1sg                          = lambda x : lambda y : (x, y) in wash.
+Speli      : rv2sg                          = lambda x : lambda y : (x, y) in wash.
+Spală      : rv3sg                          = lambda x : lambda y : (x, y) in wash.
+Spălăm     : rv1pl                          = lambda x : lambda y : (x, y) in wash.
+Spălați    : rv2pl                          = lambda x : lambda y : (x, y) in wash.
+Spală      : rv3pl                          = lambda x : lambda y : (x, y) in wash.
+
+Trezesc    : rv1sg                          = lambda x : lambda y : (x, y) in wake.
+Trezești   : rv2sg                          = lambda x : lambda y : (x, y) in wake.
+Trezește   : rv3sg                          = lambda x : lambda y : (x, y) in wake.
+Trezim     : rv1pl                          = lambda x : lambda y : (x, y) in wake.
+Treziți    : rv2pl                          = lambda x : lambda y : (x, y) in wake.
+Trezesc    : rv3pl                          = lambda x : lambda y : (x, y) in wake.
+
+Nu         : s / s                          = lambda p : not p.
+Nu         : (np1sg \ s) / (np1sg \ s)      = lambda predicate : lambda subjects : not predicate(subjects).
+Nu         : (np2sg \ s) / (np2sg \ s)      = lambda predicate : lambda subjects : not predicate(subjects).
+Nu         : (np3sg \ s) / (np3sg \ s)      = lambda predicate : lambda subjects : not predicate(subjects).
+Nu         : (np1pl \ s) / (np1pl \ s)      = lambda predicate : lambda subjects : not predicate(subjects).
+Nu         : (np2pl \ s) / (np2pl \ s)      = lambda predicate : lambda subjects : not predicate(subjects).
+Nu         : (np3pl \ s) / (np3pl \ s)      = lambda predicate : lambda subjects : not predicate(subjects).
+Și         : s \ (s / s)                    = lambda p : lambda q : p and q.
+
+Stiu       : np1sg \ s                      = lambda subjects : subjects <= know_answer.
+Stiu       : s                              = speaker <= know_answer.
+Stii       : np2sg \ s                      = lambda subjects : subjects <= know_answer.
+Stii       : s                              = listener <= know_answer.
+Stie       : np3sg \ s                      = lambda subjects : subjects <= know_answer.
+Stie       : s                              = third <= know_answer.
+Stim       : np1pl \ s                      = lambda subjects : subjects <= know_answer.
+Stim       : s                              = we <= know_answer.
+Stiti      : np2pl \ s                      = lambda subjects : subjects <= know_answer.
+Stiti      : s                              = you_plural <= know_answer.
+Stiu       : np3pl \ s                      = lambda subjects : subjects <= know_answer.
+Stiu       : s                              = they <= know_answer.
+Dormiti    : np2pl \ s                      = lambda subjects : subjects <= sleeping.
+Dormiti    : s                              = you_plural <= sleeping.
+Ma         : (np1sg \ s) / rv1sg            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Ma         : s / rv1sg                      = lambda verb : all(verb(x)(x) for x in speaker).
+Va         : (np2pl \ s) / rv2pl            = lambda verb : lambda subjects : all(verb(x)(x) for x in subjects).
+Va         : s / rv2pl                      = lambda verb : all(verb(x)(x) for x in you_plural).
+Culca      : rv3sg                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culcam     : rv1pl                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culcati    : rv2pl                          = lambda x : lambda y : (x, y) in put_to_bed.
+Culca      : rv3pl                          = lambda x : lambda y : (x, y) in put_to_bed.
+Spal       : rv1sg                          = lambda x : lambda y : (x, y) in wash.
+Spala      : rv3sg                          = lambda x : lambda y : (x, y) in wash.
+Spalam     : rv1pl                          = lambda x : lambda y : (x, y) in wash.
+Spalati    : rv2pl                          = lambda x : lambda y : (x, y) in wash.
+Spala      : rv3pl                          = lambda x : lambda y : (x, y) in wash.
+Trezesti   : rv2sg                          = lambda x : lambda y : (x, y) in wake.
+Trezeste   : rv3sg                          = lambda x : lambda y : (x, y) in wake.
+Treziti    : rv2pl                          = lambda x : lambda y : (x, y) in wake.
+Si         : s \ (s / s)                    = lambda p : lambda q : p and q.
+

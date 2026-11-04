@@ -1,0 +1,28 @@
+romanian.elx
+roworld.py
+eu știu
+știu
+ei știu
+tu știi
+știi
+eu mă culc
+mă culc
+ma culc
+tu te culci
+te culci
+ea se culcă
+ei se culcă
+se culcă
+noi ne culcăm
+vă culcați
+mă spăl
+te speli
+ne spălăm
+mă trezesc
+se trezesc
+nu mă culc
+eu nu mă culc
+mă spăl și mă culc
+eu te culci
+mă culci
+:quit
