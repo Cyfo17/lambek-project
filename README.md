@@ -47,7 +47,6 @@ Try `every cat fears a dog` for two scope readings.
 | `LExp.hs`, `PySupport.hs` | Lambda operations and Python bridge |
 | `romanian.elx`, `roworld.py` | Romanian grammar, meanings, and toy facts |
 | `ROMANIAN.md`, `romanian_demo.txt` | Extension guide and demo input |
-| `Tests.hs`, `test.py` | Core and end-to-end checks |
 
 Proof search enumerates lexical choices and context splits. Each derivation keeps
 its chosen lexical meanings for evaluation. The Romanian extension uses lexicon
@@ -59,5 +58,5 @@ The supplied parser, types, Python bridge, and English examples are unchanged.
 
 ## Assistance acknowledgement
 
-OpenAI ChatGPT generated and revised thedocumentation, and tests, assisted with the interface, and ran validation.
+OpenAI ChatGPT generated and revised the documentation and tests, assisted with the interface, and ran validation.
 
