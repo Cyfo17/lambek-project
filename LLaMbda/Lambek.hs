@@ -45,7 +45,7 @@ isGrammatical :: Lexicon sem -> [String] -> Bool
 isGrammatical lex ws =
     or [dec_rinv ts (stp lex)
        | ts <- sequence [[t | (word, t, _) <- items lex, word == w]
-                        | w <- ws]]
+                        | w <- map standardize ws]]
 
 der_rinv :: [(Var, LTp)] -> LTp -> [LExp]
 der_rinv gamma (DivL a b) =
